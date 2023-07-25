@@ -18,15 +18,9 @@ export default function Login() {
   const login = e => {
     e.preventDefault()
     signInWithEmailAndPassword(auth, email, password)
-    .then(() => {
-      if(!auth.currentUser.emailVerified) {
-          navigate('/home')
-        
-      .catch(err => alert(err.message))
-    }else{
-      navigate('/')
-    }
-    })
+    .then(
+      navigate('/home')
+    )
     .catch(err => setError(err.message))
   }
 

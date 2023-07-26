@@ -21,6 +21,12 @@ function App() {
      })
   }, [])
 
+    // Log the currentUser whenever it changes
+    useEffect(() => {
+      console.log('Current User:', currentUser);
+    }, [currentUser]);
+  
+
 
   return (
     <div className="App flex h-screen justify-center items-center ">

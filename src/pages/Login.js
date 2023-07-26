@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { auth } from '../firebase_setup/firebase.js'
 import {signInWithEmailAndPassword} from 'firebase/auth'
 import { useNavigate } from 'react-router-dom'
+import { AuthProvider } from '../context/AuthContext.js'
 
 
 export default function Login() {
@@ -14,14 +15,19 @@ export default function Login() {
   const navigate = useNavigate()
 
 
+  const currentUser = useContext(AuthProvider)
+
+
 
   const login = e => {
     e.preventDefault()
     signInWithEmailAndPassword(auth, email, password)
     .then(
-      navigate('/home')
+      navigate('/home'),
     )
+
     .catch(err => setError(err.message))
+
   }
 
 

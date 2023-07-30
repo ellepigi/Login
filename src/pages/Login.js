@@ -15,18 +15,30 @@ export default function Login() {
   const navigate = useNavigate()
 
 
-  const currentUser = useContext(AuthProvider)
 
 
 
   const login = e => {
-    e.preventDefault()
+    e.preventDefault();
+    setError(''); 
+    
+
     signInWithEmailAndPassword(auth, email, password)
     .then(
       navigate('/home'),
     )
 
-    .catch(err => setError(err.message))
+    .catch(err => {
+      console.error('Errore durante il login:', err);
+      if (err.code === 'auth/user-not-found') {
+        setError('Utente non trovato. Verifica l\'email inserita.');
+      } else if (err.code === 'auth/wrong-password') {
+        setError('Password errata. Riprova.');
+      } else {
+        setError('Errore durante il login. Si prega di riprovare più tardi.');
+      }
+    });
+    
 
   }
 
@@ -58,13 +70,14 @@ export default function Login() {
   <div className="md:flex md:items-center">
     <div className="md:w-1/3"></div>
     <div className="md:w-2/3">
-      <button className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit">
+      <button className="shadow bg-purple-500 hover:bg-purple-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit" >
       Login
        </button>
     </div>
   
   </div>
   <div className="flex mt-4 justify-center">
+      {error && <p className="text-red-500">{error}</p>} 
       <h4>Non hai un account? <Link to="/registration" className="text-blue-500">Registrati</Link></h4>
      
     </div>

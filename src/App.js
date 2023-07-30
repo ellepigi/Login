@@ -2,6 +2,7 @@ import {useState, useEffect} from 'react'
 import {auth} from './firebase_setup/firebase'
 import {onAuthStateChanged} from 'firebase/auth'
 import {AuthProvider} from './context/AuthContext'
+import PrivateRoute, { privateRoute } from './PrivateRoute'
 
 import './App.css';
 import Login from './pages/Login'
@@ -21,11 +22,7 @@ function App() {
      })
   }, [])
 
-    // Log the currentUser whenever it changes
-    useEffect(() => {
-      console.log('Current User:', currentUser);
-    }, [currentUser]);
-  
+   
 
 
   return (
@@ -36,7 +33,10 @@ function App() {
 
         <Route path="/" element={<Login/>} />
         <Route path="/registration" element={<Registration/>} />
-        <Route path="/home" element={<Home/>} />
+        <Route path="/home" element={
+        <PrivateRoute>
+        <Home/>
+        </PrivateRoute>} />
     
 
        </Routes>

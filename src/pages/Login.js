@@ -9,13 +9,15 @@ import { AuthProvider } from '../context/AuthContext.js'
 
 export default function Login() {
 
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('') 
-  const [error, setError] = useState('')
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('') ;
+  const [error, setError] = useState('');
   const navigate = useNavigate()
 
 
-
+  useEffect(() => {
+  console.log(error);
+}, [error]);
 
 
   const login = e => {
@@ -25,17 +27,20 @@ export default function Login() {
 
     signInWithEmailAndPassword(auth, email, password)
     .then(
-      navigate('/home'),
+      () => {navigate('/home'); }
     )
 
-    .catch(err => {
-      console.error('Errore durante il login:', err);
-      if (err.code === 'auth/user-not-found') {
-        setError('Utente non trovato. Verifica l\'email inserita.');
-      } else if (err.code === 'auth/wrong-password') {
-        setError('Password errata. Riprova.');
+    .catch(error => {
+      console.log(error);
+      const errorCode = error.code;
+      const errorMessage = error.message;
+
+      if (errorCode === 'auth/invalid-email') {
+        setError('L\'email non esiste');
+      } else if (errorCode === 'auth/wrong-password') {
+        setError('Password errata');
       } else {
-        setError('Errore durante il login. Si prega di riprovare più tardi.');
+        setError(errorMessage);
       }
     });
     
@@ -76,8 +81,8 @@ export default function Login() {
     </div>
   
   </div>
-  <div className="flex mt-4 justify-center">
-      {error && <p className="text-red-500">{error}</p>} 
+  <div className="flex flex-col mt-4 items-center">
+      {error && <h1 className="text-red-500">{error}</h1>} 
       <h4>Non hai un account? <Link to="/registration" className="text-blue-500">Registrati</Link></h4>
      
     </div>
